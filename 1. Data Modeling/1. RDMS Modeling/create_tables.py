@@ -7,6 +7,9 @@ load_dotenv()
 
 
 def create_database():
+    """
+    Create the database and return a connection to the databse.
+    """
     # connect to default database
     conn = psycopg2.connect(
         f"host={os.getenv('DBHOST'):{os.getenv('DBPORT')}}\
@@ -36,18 +39,27 @@ def create_database():
 
 
 def drop_tables(cur, conn):
+    """
+    Drop the database tables.
+    """
     for query in drop_table_queries:
         cur.execute(query)
         conn.commit()
 
 
 def create_tables(cur, conn):
+    """
+    Create the database tables.
+    """
     for query in create_table_queries:
         cur.execute(query)
         conn.commit()
 
 
 def main():
+    """
+    Entrypoint to the script.
+    """
     cur, conn = create_database()
 
     drop_tables(cur, conn)

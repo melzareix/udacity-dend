@@ -14,11 +14,16 @@ from sql_queries import (
     song_select,
 )
 from dotenv import load_dotenv
+
 load_dotenv()
 
 
-def process_song_file(cur, conn, filepath):
-    # open song file
+def process_song_file(cur, filepath):
+    """
+    Process a song file, reads the file and inserts the song and artist data to the database.
+    :param cur: the database cursor.
+    :param filepath: file path to the song file.
+    """
     df = pd.read_json(filepath, lines=True)
 
     # insert song record
@@ -43,7 +48,12 @@ def process_song_file(cur, conn, filepath):
     cur.execute(artist_table_insert, artist_data)
 
 
-def process_log_file(cur, conn, filepath):
+def process_log_file(cur, filepath):
+    """
+    Process a log file, reads the file and inserts the timestamp, user and songplay data to the database.
+    :param cur: the database cursor.
+    :param filepath: file path to the log file.
+    """
     # open log file
     df = pd.read_json(filepath, lines=True)
 
@@ -122,6 +132,13 @@ def process_log_file(cur, conn, filepath):
 
 
 def process_data(cur, conn, filepath, func):
+    """
+    Loads all files in the specified filepath and applies func to each file.
+    :param cur: the database cursor.
+    :param conn: the database connection.
+    :param filepath: filepath to load files from.
+    :param func: function to apply to each file.
+    """
     # get all files matching extension from directory
     all_files = []
     for root, dirs, files in os.walk(filepath):
@@ -135,11 +152,14 @@ def process_data(cur, conn, filepath, func):
 
     # iterate over files and process
     for i, datafile in tenumerate(all_files, 1):
-        func(cur, conn, datafile)
+        func(cur, datafile)
         conn.commit()
 
 
 def main():
+    """
+    Entrypoint to the script.
+    """
     conn = psycopg2.connect(
         f"host={os.getenv('DBHOST'):{os.getenv('DBPORT')}}\
         dbname={os.getenv('DBNAME')}\
