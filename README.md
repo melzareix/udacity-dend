@@ -4,4 +4,5 @@ This repository contains my solutions to the projects of Udacity's DEND. I start
 
 ## Projects List
 
-- [] P1 Relational Database Data Modeling
+- [x] P1 Relational Database Data Modeling
+- [x] P2 NoSQL Database Data Modeling
